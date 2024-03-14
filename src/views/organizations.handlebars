@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Organizations</h2>
+            <ul id="organizationList" class="list-group">
+                {{#each organizations}}
+                    <li class="list-group-item">
+                        <a href="fields/{{this}}">{{this}}</a>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>

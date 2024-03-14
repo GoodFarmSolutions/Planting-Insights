@@ -1,0 +1,92 @@
+<div class="container" id="field-container" data-orgCode="{{field.orgCode}}">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Organization <b>{{field.orgCode}}</b></h2>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Field Details</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Client</dt>
+                        <dd class="col-sm-9">{{field.client}}</dd>
+
+                        <dt class="col-sm-3">Farm</dt>
+                        <dd class="col-sm-9">{{field.farm}}</dd>
+
+                        <dt class="col-sm-3">Field</dt>
+                        <dd class="col-sm-9">{{field.field}}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Streams</h3>
+                </div>
+                <div class="card-body">
+                    {{#each field.streams}}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-3">ID</dt>
+                                    <dd class="col-sm-9">{{this.id}}</dd>
+
+                                    <dt class="col-sm-3">Season</dt>
+                                    <dd class="col-sm-9">{{this.season}}</dd>
+
+                                    <dt class="col-sm-3">Task Index</dt>
+                                    <dd class="col-sm-9">{{this.task_index}}</dd>
+
+                                    <dt class="col-sm-3">Crop Name</dt>
+                                    <dd class="col-sm-9">{{this.crop.name}}</dd>
+
+                                    <dt class="col-sm-3">Task Name</dt>
+                                    <dd class="col-sm-9">{{this.task.name}}</dd>
+                                </dl>
+                                <button onclick="requestFiles('{{this.id}}');" class="btn btn-primary btn-lg btn-block">Download 2020 File</button>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function downloadFile(fileUrl) {
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.download = "";
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function requestFiles(id) {
+        const orgCode = document.getElementById("field-container").getAttribute('data-orgCode');
+        const url = `/organization/${orgCode}/download2020/${id}`;
+
+        fetch(url)
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok.');
+                    }
+                })
+                .then((data) => {
+                    console.log(data);
+                    data.forEach(file => {
+                        downloadFile(file.url);
+                    });
+                })
+                .catch((error) => {
+                    console.error('There has been a problem with the fetch operation:', error);
+                });
+    }
+</script>

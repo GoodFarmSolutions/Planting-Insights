@@ -1,0 +1,36 @@
+<div class="container" id="field-container" data-orgCode="{{fields.orgCode}}">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Fields</h2>
+            {{#each fields}}
+                <h3>Serial Number: {{this.serial_number}}</h3>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Farm</th>
+                        <th>Field</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each this.fields}}
+                        <tr class="pointer" onclick="redirectToFieldDetails('{{this.uuid}}');">
+                            <td>{{this.client}}</td>
+                            <td>{{this.farm}}</td>
+                            <td>{{this.field}}</td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            {{/each}}
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function redirectToFieldDetails(id) {
+        const orgCode = document.getElementById("field-container").getAttribute('data-orgCode');
+        window.location.href = `/organization/${orgCode}/fieldDetails/${id}`;
+    }
+</script>
